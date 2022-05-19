@@ -1,0 +1,155 @@
+<h2>Categories</h2>
+<p>Check out a list of games sorted by category.</p>
+<ul class="list-unstyled ps-0">
+  <li class="mb-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+      <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+    </svg>
+    <button
+      class="btn btn-toggle align-items-center rounded collapsed"
+      data-bs-toggle="collapse"
+      data-bs-target="#esrb-collapse"
+      aria-expanded="true"
+    >
+      <%= esrb_title %>
+    </button>
+    <div class="collapse show" id="esrb-collapse">
+      <ul class="btn-toggle-nav fw-normal pb-1 small">
+        <% for (let prop in data.esrb_rating) { %>
+        <li>
+          <a href="<%= data.esrb_rating[prop].url %>" class="link-dark rounded">
+            <%- data.esrb_rating[prop].rating %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </li>
+
+  <li class="mb-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+      <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+    </svg>
+    <button
+      class="btn btn-toggle align-items-center rounded collapsed"
+      data-bs-toggle="collapse"
+      data-bs-target="#genres-collapse"
+      aria-expanded="false"
+    >
+      <%= genre_title %>
+    </button>
+    <div class="collapse" id="genres-collapse">
+      <ul class="btn-toggle-nav fw-normal pb-1 small">
+        <% for (let prop in data.genres) { %>
+        <li>
+          <a href="<%= data.genres[prop].url %>" class="link-dark rounded">
+            <%- data.genres[prop].name %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </li>
+
+  <li class="mb-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+      <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+    </svg>
+    <button
+      class="btn btn-toggle align-items-center rounded collapsed"
+      data-bs-toggle="collapse"
+      data-bs-target="#developers-collapse"
+      aria-expanded="false"
+    >
+      <%= developer_title %>
+    </button>
+    <div class="collapse" id="developers-collapse">
+      <ul class="btn-toggle-nav fw-normal pb-1 small">
+        <% for (let prop in data.developers) { %>
+        <li>
+          <a href="<%= data.developers[prop].url %>" class="link-dark rounded">
+            <%- data.developers[prop].name %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </li>
+
+  <li class="mb-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+      <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+    </svg>
+    <button
+      class="btn btn-toggle align-items-center rounded collapsed"
+      data-bs-toggle="collapse"
+      data-bs-target="#platforms-collapse"
+      aria-expanded="false"
+    >
+      <%= platform_title %>
+    </button>
+    <div class="collapse" id="platforms-collapse">
+      <ul class="btn-toggle-nav fw-normal pb-1 small">
+        <% for (let prop in data.platforms) { %>
+        <li>
+          <a href="<%= data.platforms[prop].url %>" class="link-dark rounded">
+            <%- data.platforms[prop].console %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </li>
+</ul>
+
+<!-- <h5><%= genre_title %></h5>
+<ul class="icon-list">
+
+  <% for (let prop in data.genres) { %>
+
+  <div class="collapse show" id="home-collapse">
+    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+      <li>
+        <a href="<%= data.genres[prop].url %>">
+          <%- data.genres[prop].name %>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <% } %>
+</ul> -->
+
+<!-- <h5><%= developer_title %></h5>
+<ul class="icon-list">
+  <% for (let prop in data.developers) { %>
+
+  <div class="collapse show" id="home-collapse">
+    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+      <li>
+        <a href="<%= data.developers[prop].url %>">
+          <%- data.developers[prop].name %>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <% } %>
+</ul>
+
+<h5><%= platform_title %></h5>
+<ul class="icon-list">
+  <% for (let prop in data.platforms) { %>
+
+  <div class="collapse show" id="home-collapse">
+    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+      <li>
+        <a href="<%= data.platforms[prop].url %>">
+          <%- data.platforms[prop].console %>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <% } %>
+</ul> -->

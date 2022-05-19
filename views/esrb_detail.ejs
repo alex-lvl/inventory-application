@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head') %>
+  <body>
+    <%- include('nav') %>
+
+    <%- include('description', {name: esrb.rating, description: esrb.description}) %>
+
+      <main>
+        <h4>Rated <%= esrb.rating %> Video Games</h4>
+        <ul class="fs-5">
+          <% for (let prop in esrb_games) { %>
+            <li>
+              <a href= '<%= esrb_games[prop].url %>'>
+                <%- esrb_games[prop].title %>
+              </a>
+            </li>
+            <% } %>
+        </ul>
+      </main>
+
+      <footer class="pt-5 my-5 text-muted border-top">
+        Created by the Bootstrap team &middot; &copy; 2021
+      </footer>
+    </div>
+  </body>
+</html>

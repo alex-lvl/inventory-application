@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head') %>
+  <body>
+    <%- include('nav') %>
+
+    <%- include('description', {name: title, description: game.description}) %>
+
+      <main>
+        <h4>Game Copies</h4>
+        <ul class="fs-5">
+          <% for (let prop in game_instance) { %>
+            <li>
+              <a href= '<%= game_instance[prop].url %>'>
+                <%- game_instance[prop].game.title %>
+              </a>
+              <ul>
+                <li>Platform: <%- game_instance[prop].platform.console %></li>
+                <li>Status: <%- game_instance[prop].status %></li>
+              </ul>
+            </li>
+            <% } %>
+        </ul>
+      </main>
+
+      <footer class="pt-5 my-5 text-muted border-top">
+        Created by the Bootstrap team &middot; &copy; 2021
+      </footer>
+    </div>
+  </body>
+</html>
