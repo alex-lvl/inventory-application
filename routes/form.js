@@ -42,7 +42,7 @@ router.post('/esrb/:id/update', esrbController.esrb_update_post);
 /* game form. */
 // router.get('/developers', developerController.developer_create_get);
 
-router.get('/game/create', gameController.game_create_get);
+router.get('/game/create', gameController.game_item, gameController.game_create_get);
 
 router.post('/game/create', gameController.game_create_post);
 
