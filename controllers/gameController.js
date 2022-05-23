@@ -5,6 +5,7 @@ const GameInstance = require('../models/gameinstance');
 const Platform = require('../models/platform');
 const Esrb = require('../models/esrb');
 var async = require('async');
+const { body, validationResult } = require('express-validator');
 
 exports.index = function (req, res) {
   async.parallel(
@@ -110,7 +111,7 @@ exports.game_list = function (req, res, next) {
         platform_title: 'Platform',
         games_list: results.list_games,
         error: err,
-        data: results
+        data: results,
       });
     }
   );
@@ -170,13 +171,128 @@ exports.game_detail = function (req, res, next) {
   );
 };
 
+exports.game_item = function(req,res,next) {
+  let game;
+  let errors;
+
+  res.locals.game = game;
+  res.locals.errors = errors;
+  
+  next();
+}
+
 exports.game_create_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: get create game');
+  // res.send('NOT IMPLEMENTED: get create game');
+  async.parallel(
+    {
+      developers: function (callback) {
+        Developer.find(callback);
+      },
+      esrb_ratings: function (callback) {
+        Esrb.find(callback);
+      },
+      genres: function (callback) {
+        Genre.find(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      //success
+      res.render('game_form', {
+        title: 'Create New Game',
+        developers: results.developers,
+        esrb_ratings: results.esrb_ratings,
+        genres: results.genres,
+      });
+    }
+  );
 };
 
-exports.game_create_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: post create game');
-};
+exports.game_create_post = [
+  // Convert the genre to an array.
+  (req, res, next) => {
+    if (!(req.body.genre instanceof Array)) {
+      if (typeof req.body.genre === 'undefined') req.body.genre = [];
+      else req.body.genre = new Array(req.body.genre);
+    }
+    next();
+  },
+
+  //validation and sanitization.
+  body('title', 'Title required').trim().isLength({ min: 1 }).escape(),
+  body('developer', 'Developer required').trim().isLength( {min: 1} ).escape(),
+  body('description', 'Description required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('price', 'Price required')
+    .trim()
+    .isFloat()
+    .withMessage('Numeric value required in price')
+    .isDecimal({ decimal_digits: '2', force_decimal: true })
+    .withMessage('Two decimal digits required in price')
+    .escape(),
+  body('esrb_rating').trim().isLength({ min: 1 }).escape(),
+
+  //Process request after validation and sanitization.
+  function (req, res, next) {
+    const errors = validationResult(req);
+
+    //create new Developer
+    var game = new Game({
+      title: req.body.title,
+      developer: req.body.developer,
+      description: req.body.description,
+      price: req.body.price,
+      esrb: req.body.esrb_rating,
+      genre: req.body.genre,
+      quantity: '',
+    });
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          developers: function (callback) {
+            Developer.find(callback);
+          },
+          esrb_ratings: function (callback) {
+            Esrb.find(callback);
+          },
+          genres: function (callback) {
+            Genre.find(callback);
+          },
+        },
+        function (err, results) {
+          if (err) {
+            return next(err);
+          }
+          //errors found rerender form
+          res.render('game_form', {
+            title: 'Create New Game',
+            game: game,
+            developers: results.developers,
+            esrb_ratings: results.esrb_ratings,
+            genres: results.genres,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    } else {
+      //data is valid
+      game.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        //success
+        console.log('New Game ' + game);
+        res.redirect(game.url);
+      });
+    }
+  },
+];
 
 exports.game_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED: post create game');

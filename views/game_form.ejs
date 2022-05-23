@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head') %>
+  <body>
+    <%- include('nav') %>
+
+    <main class="px-4">
+      <header>
+        <h1><%= title %></h1>
+
+        <% if (errors) { %>
+          <ul>
+            <% for (let error of errors) { %>
+              <li>
+                  <%- error.msg %>
+              </li>
+              <% } %>
+          </ul>
+        <% } %>
+      </header>
+      
+      <form action="" method="POST">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title:</label>
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Title" name="title" required="true" value="<%- undefined === game ? '' : game.title %>" >
+        </div>
+        <div class="mb-3">
+          <label for="developer" class="form-label">Developer:</label>
+          <select class="form-select" type="select" placeholder="Select a a Developer" name="developer" aria-label="Default select example" required="true">
+              <% for (let developer of developers) { %>
+                <% if (game) { %>
+                  <option value="<%= developer._id %>" selected="<%- (developer._id.toString() === game.developer._id || developer._id.toString() === game.developer) ? 'selected' : false %>">
+                    <%= developer.name %>
+                  </option>
+                <% } else { %>
+                  <option value="<%= developer._id %>">
+                    <%= developer.name %>
+                  </option>
+                <% } %>
+              <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">description:</label>
+          <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="description" required="true">
+            <%- game === undefined ? '' : game.description %>
+          </textarea>
+        </div>  
+        <div class="mb-3">
+          <label for="price" class="form-label">price:</label>
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="price" name="price" required="true" value="<%- game === undefined ? '' : game.price %>">
+        </div>
+        <div class="mb-3">
+          <label for="esrb_rating" class="form-label">ESRB Rating:</label>
+          <select class="form-select" type="select" placeholder="Select an ESRB Rating" name="esrb_rating" aria-label="Default select example" required="true">
+              <% for (let esrb_rating of esrb_ratings) { %>
+                <% if (game) { %>
+                  <option value="<%= esrb_rating._id %>" selected="<%- (esrb_rating._id.toString() === game.esrb._id || esrb_rating._id.toString() === game.esrb) ? 'selected' : false %>">
+                    <%= esrb_rating.rating %>
+                  </option>
+                <% } else { %>
+                  <option value="<%= esrb_rating._id %>">
+                    <%= esrb_rating.rating %>
+                  </option>
+                <% } %>
+              <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <p for="">Genre:</p>
+          <% for (let genre of genres) { %>
+            <input class="form-check-input me-1" type="checkbox" name="genre" id="flexCheckDefault" value="<%= genre._id %>">
+            <label for="<%= genre._id %>" class="form-label">
+              <%= genre.name %>
+            </label>
+          <% } %>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary mb-3">Submit</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="pt-5 my-5 text-muted border-top">
+      Created by the Bootstrap team &middot; &copy; 2021
+    </footer>
+  </body>
+</html>

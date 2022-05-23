@@ -7,6 +7,16 @@
     <main class="px-4">
       <header>
         <h1><%= title %></h1>
+
+        <% if (errors) { %>
+          <ul>
+            <% for (let error of errors) { %>
+              <li>
+                  <%- error.msg %>
+              </li>
+              <% } %>
+          </ul>
+        <% } %>
       </header>
       
       <form action="" method="POST">
@@ -15,12 +25,16 @@
           <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="name" name="name" required="true">
         </div>
         <div class="mb-3">
-          <label for="website" class="form-label">website url:</label>
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="URL" name="website">
+          <label for="weburl" class="form-label">website url:</label>
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="URL" name="weburl" required="true">
+        </div>
+        <div class="mb-3">
+          <label for="logo" class="form-label">logo:</label>
+          <input type="file" class="form-control" id="exampleFormControlInput1" name="logo" disabled="true">
         </div>
         <div class="mb-3">
           <label for="about" class="form-label">about:</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="about the developer" required="true"></textarea>
+          <textarea class="form-control" name="about" id="exampleFormControlTextarea1" rows="3" placeholder="about the developer" required="true"></textarea>
         </div>  
         <div class="col-auto">
           <button type="submit" class="btn btn-primary mb-3">Submit</button>
