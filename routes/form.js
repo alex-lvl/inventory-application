@@ -57,7 +57,7 @@ router.post('/game/:id/update', gameController.game_update_post);
 /* gameinstance form. */
 // router.get('/developers', developerController.developer_create_get);
 
-router.get('/gameinstance/create', gameinstanceController.gameinstance_create_get);
+router.get('/gameinstance/create', gameinstanceController.gameinstance_locals , gameinstanceController.gameinstance_create_get);
 
 router.post('/gameinstance/create', gameinstanceController.gameinstance_create_post);
 
@@ -72,7 +72,7 @@ router.post('/gameinstance/:id/update', gameinstanceController.gameinstance_upda
 /* genre form. */
 // router.get('/developers', developerController.developer_create_get);
 
-router.get('/genre/create', genreController.genre_create_get);
+router.get('/genre/create', genreController.genre_locals , genreController.genre_create_get);
 
 router.post('/genre/create', genreController.genre_create_post);
 
@@ -87,7 +87,7 @@ router.post('/genre/:id/update', genreController.genre_update_post);
 /* platform form. */
 // router.get('/developers', developerController.developer_create_get);
 
-router.get('/platform/create', platformController.platform_create_get);
+router.get('/platform/create', platformController.platform_locals , platformController.platform_create_get);
 
 router.post('/platform/create', platformController.platform_create_post);
 

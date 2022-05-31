@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head') %>
+  <body>
+    <%- include('nav') %>
+
+    <main class="px-4">
+      <header>
+        <h1><%= title %></h1>
+
+        <% if (errors) { %>
+          <ul>
+            <% for (let error of errors) { %>
+              <li>
+                  <%- error.msg %>
+              </li>
+              <% } %>
+          </ul>
+        <% } %>
+      </header>
+      
+      <form action="" method="POST">
+        <div class="mb-3">
+          <label for="game" class="form-label">Game:</label>
+          <select class="form-select" type="select" placeholder="Select a game" name="game" aria-label="Default select example" required="true">
+              <% for (let game of games) { %>
+                <% if (gameinstance) { %>
+                  <option value="<%= game._id %>" selected="<%- (game._id.toString() === gameinstance.game._id || game._id.toString() === gameinstance.game) ? 'selected' : false %>">
+                    <%= game.title %>
+                  </option>
+                <% } else { %>
+                  <option value="<%= game._id %>">
+                    <%= game.title %>
+                  </option>
+                <% } %>
+              <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="platform" class="form-label">Platform:</label>
+          <select class="form-select" type="select" placeholder="Select a platform" name="platform" aria-label="Default select example" required="true">
+              <% for (let platform of platforms) { %>
+                <% if (gameinstance) { %>
+                  <option value="<%= platform._id %>" selected="<%- (platform._id.toString() === gameinstance.platform._id || platform._id.toString() === gameinstance.platform) ? 'selected' : false %>">
+                    <%= platform.console %>
+                  </option>
+                <% } else { %>
+                  <option value="<%= platform._id %>">
+                    <%= platform.console %>
+                  </option>
+                <% } %>
+              <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="imprint" class="form-label">Imprint:</label>
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="imprint" name="imprint" required="true" value="<%- undefined === gameinstance ? '' : gameinstance.imprint %>" >
+        </div>
+        <div class="mb-3">
+          <label for="status" class="form-label">Status:</label>
+          <select class="form-select" type="select" placeholder="Select a status" name="status" aria-label="Default select example" required="true">
+              <option>Available</option>
+              <option>Maintenance</option>
+              <option>Loaned</option>
+              <option>Reserved</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="due_back" class="form-label">Due Back:</label>
+          <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="due_back" name="due_back" required="true" value="<%- undefined === gameinstance ? '' : gameinstance.due_back_formatted %>" >
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary mb-3">Submit</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="pt-5 my-5 text-muted border-top">
+      Created by the Bootstrap team &middot; &copy; 2021
+    </footer>
+  </body>
+</html>

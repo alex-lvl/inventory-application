@@ -1,50 +1,58 @@
 const Developer = require('../models/developer');
-const Game = require('../models/game')
+const Game = require('../models/game');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
 
 //Display all authors
-exports.developer_list = function(req, res, next) {
-
+exports.developer_list = function (req, res, next) {
   Developer.find()
     .sort([['name', 'ascending']])
     .exec(function (err, list_developers) {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       //Successful, so render
-      res.render('developer_list', { title: 'Developer List', developer_list: list_developers });
+      res.render('developer_list', {
+        title: 'Developer List',
+        developer_list: list_developers,
+      });
     });
-
 };
 
 //Display detail specific Developer
-exports.developer_detail = function(req, res, next) {
-
-  async.parallel({
-    developer: function(callback) {
-      Developer.findById(req.params.id)
-      .exec(callback);
+exports.developer_detail = function (req, res, next) {
+  async.parallel(
+    {
+      developer: function (callback) {
+        Developer.findById(req.params.id).exec(callback);
+      },
+      developer_games: function (callback) {
+        Game.find({ developer: req.params.id }, 'title description').exec(
+          callback
+        );
+      },
     },
-    developer_games: function(callback){
-      Game.find({developer: req.params.id}, 'title description')
-      .exec(callback);
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.developer === null) {
+        let err = new Error('Developer not found');
+        err.status = 404;
+        return next(err);
+      }
+      //success
+      res.render('developer_detail', {
+        title: 'Developer Detail',
+        developer: results.developer,
+        developer_games: results.developer_games,
+      });
     }
-  }, function(err, results) {
-    if (err) {
-      return next(err);
-    }
-    if (results.developer === null) {
-      let err = new Error('Developer not found');
-      err.status = 404;
-      return next(err);
-    }
-    //success
-    res.render('developer_detail', {title: 'Developer Detail', developer: results.developer, developer_games: results.developer_games});
-  });
-  
-}
+  );
+};
 
 exports.developer_create_get = function (req, res) {
-  res.render('developer_form', {title: 'Create Developer', errors: false})
+  res.render('developer_form', { title: 'Create Developer', errors: false });
 };
 
 // exports.developer_create_post = function (req, res) {
@@ -52,11 +60,20 @@ exports.developer_create_get = function (req, res) {
 // };
 
 exports.developer_create_post = [
-
   //validation and sanitization.
-  body('name').trim().isLength({min: 1}).escape().withMessage('Developer name must be specified.').isAlphanumeric().withMessage('Developer Name has non-alphanumeric characters.'),
+  body('name')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Developer name must be specified.')
+    .isAlphanumeric()
+    .withMessage('Developer Name has non-alphanumeric characters.'),
   body('weburl', 'invalid url').isURL().escape(),
-  body('about').trim().isLength({min: 1}).escape().withMessage('About the developer must be specified.'),
+  body('about')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('About the developer must be specified.'),
 
   //Process request after validation and sanitization.
   function (req, res, next) {
@@ -64,7 +81,11 @@ exports.developer_create_post = [
 
     if (!errors.isEmpty()) {
       //there are errors render form again
-      res.render('developer_form', {title: 'Create Developer', developer: req.body, errors: errors.array() });
+      res.render('developer_form', {
+        title: 'Create Developer',
+        developer: req.body,
+        errors: errors.array(),
+      });
       return;
     } else {
       //data is valid
@@ -78,15 +99,14 @@ exports.developer_create_post = [
       });
       developer.save(function (err) {
         if (err) {
-          return next(err)
+          return next(err);
         }
         //success
         console.log('New Developer ' + developer);
         res.redirect(developer.url);
       });
     }
-  }
-
+  },
 ];
 
 exports.developer_delete_get = function (req, res) {
