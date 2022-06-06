@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head') %>
+  <body>
+    <%- include('nav') %>
+
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+      <header>
+        <h1><%= title %></h1>
+      </header>
+
+      <main>
+          <h4>Do you really want to delete this Game Copy?</h4>
+          <form method="POST">
+            <input type="hidden" name="gameinstanceid" id="" value="<%- gameinstance._id %>" required="true">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+      </main>
+
+      <footer class="pt-5 my-5 text-muted border-top">
+        Created by the Bootstrap team &middot; &copy; 2021
+      </footer>
+    </div>
+  </body>
+</html>

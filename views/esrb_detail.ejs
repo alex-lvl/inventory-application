@@ -4,7 +4,7 @@
   <body>
     <%- include('nav') %>
 
-    <%- include('description', {name: esrb.rating, description: esrb.description}) %>
+    <%- include('description', {name: esrb.rating, description: esrb.description, updateUrl: '#', deleteUrl: '#'}) %>
 
       <main>
         <h4>Rated <%= esrb.rating %> Video Games</h4>

@@ -4,7 +4,7 @@
   <body>
     <%- include('nav') %>
 
-    <%- include('description', {name: platform.console, description: platform.description}) %>
+    <%- include('description', {name: platform.console, description: platform.description, deleteUrl: platform.formUrl + '/delete', updateUrl: platform.formUrl + '/update'}) %>
 
       <main>
         <h4><%= platform.console %> Games</h4>
@@ -12,8 +12,12 @@
           <% for (let prop in platform_games) { %>
             <li>
               <a href= '<%= platform_games[prop].url %>'>
-                <%- platform_games[prop].title %>
+                <%- platform_games[prop].game.title %>
               </a>
+              <ul>
+                <li>Platform: <%- platform_games[prop].platform.console %></li>
+                <li>Status: <%- platform_games[prop].status %></li>
+              </ul>
             </li>
             <% } %>
         </ul>

@@ -1,7 +1,9 @@
 const Platform = require('../models/platform');
 const Game = require('../models/game');
+const GameInstance = require('../models/gameinstance');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
+const gameinstance = require('../models/gameinstance');
 
 exports.platform_locals = function (req, res, next) {
   let errors;
@@ -25,9 +27,10 @@ exports.platform_detail = function (req, res, next) {
         Platform.findById(req.params.id).exec(callback);
       },
       platform_games: function (callback) {
-        Game.find({ platform: req.params.id }, 'title description').exec(
-          callback
-        );
+        GameInstance.find({ platform: req.params.id })
+          .populate('game')
+          .populate('platform')
+          .exec(callback);
       },
     },
     function (err, results) {
@@ -80,7 +83,10 @@ exports.platform_create_post = [
     } else {
       // Data from form is valid.
       // Check if platform with same console already exists.
-      Platform.findOne({ console: req.body.console }).exec(function (err, found_console) {
+      Platform.findOne({ console: req.body.console }).exec(function (
+        err,
+        found_console
+      ) {
         if (err) {
           return next(err);
         }
@@ -105,12 +111,92 @@ exports.platform_create_post = [
 //   res.send('NOT IMPLEMENTED: post create platform');
 // };
 
-exports.platform_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: get delete platform');
+exports.platform_delete_get = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: get delete platform');
+
+  async.parallel(
+    {
+      platform: function (callback) {
+        Platform.findById(req.params.id).exec(callback);
+      },
+      platform_gameinstances: function (callback) {
+        GameInstance.find({ platform: req.params.id })
+          .populate('game')
+          .populate('platform')
+          .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.platform === null) {
+        res.redirect('/catalog');
+      }
+      res.render('platform_delete', {
+        title: 'Platform Delete',
+        platform: results.platform,
+        platform_gameinstances: results.platform_gameinstances,
+      });
+    }
+  );
+
+  // Platform.findById(req.params.id).exec(function (err, platform) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   if (platform == null) {
+  //     res.redirect('/catalog');
+  //   }
+  //   res.render('platform_delete', {
+  //     title: 'Delete Platform',
+  //     platform: platform,
+  //   });
+  // });
 };
 
-exports.platform_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: post delete platform');
+exports.platform_delete_post = function (req, res, next) {
+  async.parallel(
+    {
+      platform: function (callback) {
+        Platform.findById(req.body.platformid).exec(callback);
+      },
+      platform_gameinstances: function (callback) {
+        GameInstance.find({ platform: req.body.platformid }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (platform_gameinstances.length > 0) {
+        res.render('platform_delete', {
+          title: 'Platform Delete',
+          platform: results.platform,
+          platform_gameinstances: results.platform_gameinstances,
+        });
+      } else {
+        Platform.findByIdAndRemove(req.body.platformid, function (err) {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/catalog');
+        });
+      }
+    }
+  );
+
+  // Platform.findById(req.params.id).exec(function (err, platform) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   Platform.findByIdAndRemove(req.body.platformid, function (err) {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     res.redirect('/catalog');
+  //   });
+  // });
 };
 
 exports.platform_update_get = function (req, res) {

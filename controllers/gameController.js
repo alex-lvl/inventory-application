@@ -294,12 +294,80 @@ exports.game_create_post = [
   },
 ];
 
-exports.game_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: post create game');
+exports.game_delete_get = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: post create game');
+
+  async.parallel(
+    {
+      game: function (callback) {
+        Game.findById(req.params.id)
+          .populate('developer')
+          .populate('genre')
+          .exec(callback);
+      },
+      game_instances: function (callback) {
+        GameInstance.find({ game: req.params.id })
+          .populate('game')
+          .populate('platform')
+          .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.game === null) {
+        res.redirect('/catalog/games')
+      }
+      res.render('game_delete', {
+        title: 'Delete Game',
+        game: results.game,
+        game_instance: results.game_instances,
+      });
+    }
+  );
+
 };
 
-exports.game_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: post create game');
+exports.game_delete_post = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: post create game');
+  async.parallel(
+    {
+      game: function (callback) {
+        Game.findById(req.body.gameid)
+          .populate('developer')
+          .populate('genre')
+          .exec(callback);
+      },
+      game_instances: function (callback) {
+        GameInstance.find({ game: req.body.gameid })
+          .populate('game')
+          .populate('platform')
+          .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.game_instances > 0) {
+        res.render('game_delete', {
+          title: 'Delete Game',
+          game: results.game,
+          game_instance: results.game_instances,
+        });
+        return;
+      } else {
+        Game.findByIdAndRemove(req.body.gameid, function(err) {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/catalog/games');
+        })
+      }
+    }
+  );
+
 };
 
 exports.game_update_get = function (req, res) {

@@ -15,4 +15,10 @@ PlatformSchema
   return '/catalog/platform/' + this._id;
 });
 
+PlatformSchema
+.virtual('formUrl')
+.get(function () {
+  return '/form/platform/' + this._id;
+});
+
 module.exports = mongoose.model('Platform', PlatformSchema);

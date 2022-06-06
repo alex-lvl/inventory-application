@@ -17,4 +17,10 @@ DeveloperSchema
   return '/catalog/developer/' + this._id;
 });
 
+DeveloperSchema
+.virtual('formUrl')
+.get(function () {
+  return '/form/developer/' + this._id;
+});
+
 module.exports = mongoose.model('Developer', DeveloperSchema);

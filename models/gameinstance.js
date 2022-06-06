@@ -19,6 +19,12 @@ GameInstanceSchema
 });
 
 GameInstanceSchema
+.virtual('formUrl')
+.get(function () {
+  return '/form/gameinstance/' + this._id;
+});
+
+GameInstanceSchema
 .virtual('due_back_formatted')
 .get(function () {
   return this.due_back.toDateString();

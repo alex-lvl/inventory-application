@@ -4,10 +4,14 @@
   <body>
     <%- include('nav') %>
 
-    <%- include('description', {name: title, description: game.description, deleteUrl: game.formUrl + '/delete', updateUrl: game.formUrl + '/update'}) %>
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+      <header>
+        <h1><%= game.title %></h1>
+      </header>
 
       <main>
-        <h4>Game Copies</h4>
+        <% if (game_instance.length) { %>
+        <h4>Delete the following game instances before attempting to delete game</h4>
         <ul class="fs-5">
           <% for (let prop in game_instance) { %>
             <li>
@@ -21,6 +25,13 @@
             </li>
             <% } %>
         </ul>
+        <% } else { %>
+          <h4>Do you really want to delete this Game?</h4>
+          <form method="POST">
+            <input type="hidden" name="gameid" id="" value="<%- game._id %>" required="true">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        <% } %>
       </main>
 
       <footer class="pt-5 my-5 text-muted border-top">

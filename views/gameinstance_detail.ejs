@@ -4,7 +4,7 @@
   <body>
     <%- include('nav') %>
 
-    <%- include('description', {name: title, description: gameinstance.game.description}) %>
+    <%- include('description', {name: title, description: gameinstance.game.description, deleteUrl: gameinstance.formUrl + '/delete', updateUrl: gameinstance.formUrl + '/update'}) %>
 
       <main>
         <h4>ID: <%= gameinstance._id %> </h4>

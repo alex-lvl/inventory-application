@@ -109,16 +109,86 @@ exports.developer_create_post = [
   },
 ];
 
-exports.developer_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: get delete developer');
+exports.developer_delete_get = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: get delete developer');
+  async.parallel(
+    {
+      developer: function (callback) {
+        Developer.findById(req.params.id).exec(callback);
+      },
+      developer_games: function (callback) {
+        Game.find({ developer: req.params.id }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.developer === null) {
+        res.redirect('/catalog');
+      }
+      //success
+      res.render('developer_delete', {
+        title: 'Delete Developer',
+        developer: results.developer,
+        developer_games: results.developer_games,
+      });
+    }
+  );
 };
 
-exports.developer_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: post delete developer');
+exports.developer_delete_post = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: post delete developer');
+  async.parallel(
+    {
+      developer: function (callback) {
+        Developer.findById(req.body.developerid).exec(callback);
+      },
+      developer_games: function (callback) {
+        Game.find({ developer: req.body.developerid }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.developer_games.length > 0) {
+        res.render('developer_delete', {
+          title: 'Delete Developer',
+          developer: results.developer,
+          developer_games: results.developer_games,
+        });
+        return;
+      } else {
+        Developer.findByIdAndRemove(req.body.developerid, function (err) {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/catalog');
+        });
+      }
+    }
+  );
 };
 
 exports.developer_update_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: get update developer');
+  // res.send('NOT IMPLEMENTED: get update developer');
+
+  Developer.findById(req.params.id).exec(function (err, developer) {
+    if (err) {
+      return next(err);
+    }
+    if (developer === null) {
+      var err = new Error('Developer not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('developer_form', {
+      title: 'Create Developer',
+      developer: developer,
+    });
+  });
+  
 };
 
 exports.developer_update_post = function (req, res) {

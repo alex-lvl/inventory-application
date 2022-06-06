@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head') %>
+  <body>
+    <%- include('nav') %>
+
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+      <header>
+        <h1><%= developer.name %></h1>
+      </header>
+
+      <main>
+        <% if (developer_games.length) { %>
+        <h4>Delete the following games before attempting to delete developer</h4>
+        <ul class="fs-5">
+          <% for (let prop in developer_games) { %>
+          <li>
+            <a href="<%= developer_games[prop].url %>">
+              <%- developer_games[prop].title %>
+            </a>
+          </li>
+          <% } %>
+        </ul>
+        <% } else { %>
+          <h4>Do you really want to delete this Developer?</h4>
+          <form method="POST">
+            <input type="hidden" name="developerid" id="" value="<%- developer._id %>" required="true">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        <% } %>
+      </main>
+
+      <footer class="pt-5 my-5 text-muted border-top">
+        Created by the Bootstrap team &middot; &copy; 2021
+      </footer>
+    </div>
+  </body>
+</html>

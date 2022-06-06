@@ -141,16 +141,50 @@ exports.gameinstance_create_post = [
   },
 ];
 
-// exports.gameinstance_create_post = function (req, res) {
-//   res.send('NOT IMPLEMENTED: post create game instance');
-// };
+exports.gameinstance_delete_get = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: get delete game instance');
 
-exports.gameinstance_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: get delete game instance');
+  GameInstance.findById(req.params.id)
+    .populate('game')
+    .exec(function(err, gameinstance) {
+      if (err) {
+        return next(err);
+      } 
+      if (gameinstance === null) {
+        //no results.
+        res.redirect('/catalog/games');
+      }
+      //successfull
+      res.render('gameinstance_delete', {
+        title: 'Delete game instance',
+        gameinstance: gameinstance,
+      });
+    });
 };
 
-exports.gameinstance_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: post delete game instance');
+exports.gameinstance_delete_post = function (req, res, next) {
+  // res.send('NOT IMPLEMENTED: post delete game instance');
+
+  GameInstance.findById(req.params.id)
+  .populate('game')
+  .exec(function(err, gameinstance) {
+    if (err) {
+      return next(err);
+    } 
+    // if (gameinstance === null) {
+    //   //no results.
+    //   res.redirect('/catalog');
+    // }
+    //successfull
+    GameInstance.findByIdAndRemove(req.body.gameinstanceid, function(err) {
+      if (err) {
+        return next(err);
+      }
+      //success
+      res.redirect('/catalog/games');
+    })
+  });
+
 };
 
 exports.gameinstance_update_get = function (req, res) {

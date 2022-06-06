@@ -15,4 +15,10 @@ EsrbSchema
   return '/catalog/esrb/' + this._id;
 });
 
+EsrbSchema
+.virtual('formUrl')
+.get(function () {
+  return '/form/esrb/' + this._id;
+});
+
 module.exports = mongoose.model('Esrb', EsrbSchema);

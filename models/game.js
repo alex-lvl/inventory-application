@@ -20,4 +20,10 @@ GameSchema
   return '/catalog/game/' + this._id;
 });
 
+GameSchema
+.virtual('formUrl')
+.get(function () {
+  return '/form/game/' + this._id;
+});
+
 module.exports = mongoose.model('Game', GameSchema);

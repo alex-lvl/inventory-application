@@ -4,7 +4,7 @@
   <body>
     <%- include('nav') %>
 
-    <%- include('description', {name: genre.name, description: genre.description}) %>
+    <%- include('description', {name: genre.name, description: genre.description, deleteUrl: genre.formUrl + '/delete', updateUrl: genre.formUrl + '/update'}) %>
 
       <main>
         <h4><%- genre.name %> Games</h4>

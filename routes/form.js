@@ -26,7 +26,7 @@ router.post('/developer/:id/update', developerController.developer_update_post);
 /* esrb form. */
 // router.get('/developers', developerController.developer_create_get);
 
-router.get('/esrb/create', esrbController.esrb_create_get);
+router.get('/esrb/create', esrbController.esrb_locals ,esrbController.esrb_create_get);
 
 router.post('/esrb/create', esrbController.esrb_create_post);
 
