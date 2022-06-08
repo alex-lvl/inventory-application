@@ -11,26 +11,34 @@
 
       <main>
         <% if (game_instance.length) { %>
-        <h4>Delete the following game instances before attempting to delete game</h4>
+        <h4>
+          Delete the following game instances before attempting to delete game
+        </h4>
         <ul class="fs-5">
           <% for (let prop in game_instance) { %>
-            <li>
-              <a href= '<%= game_instance[prop].url %>'>
-                <%- game_instance[prop].game.title %>
-              </a>
-              <ul>
-                <li>Platform: <%- game_instance[prop].platform.console %></li>
-                <li>Status: <%- game_instance[prop].status %></li>
-              </ul>
-            </li>
-            <% } %>
+          <li>
+            <a href="<%= game_instance[prop].url %>">
+              <%- game_instance[prop].game.title %>
+            </a>
+            <ul>
+              <li>Platform: <%- game_instance[prop].platform.console %></li>
+              <li>Status: <%- game_instance[prop].status %></li>
+            </ul>
+          </li>
+          <% } %>
         </ul>
         <% } else { %>
-          <h4>Do you really want to delete this Game?</h4>
-          <form method="POST">
-            <input type="hidden" name="gameid" id="" value="<%- game._id %>" required="true">
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
+        <h4>Do you really want to delete this Game?</h4>
+        <form method="POST">
+          <input
+            type="hidden"
+            name="gameid"
+            id=""
+            value="<%- game._id %>"
+            required="true"
+          />
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
         <% } %>
       </main>
 

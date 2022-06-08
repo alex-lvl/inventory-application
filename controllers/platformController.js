@@ -1,9 +1,7 @@
 const Platform = require('../models/platform');
-const Game = require('../models/game');
 const GameInstance = require('../models/gameinstance');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
-const gameinstance = require('../models/gameinstance');
 
 exports.platform_locals = function (req, res, next) {
   let errors;
@@ -107,9 +105,6 @@ exports.platform_create_post = [
     }
   },
 ];
-// exports.platform_create_post = function (req, res) {
-//   res.send('NOT IMPLEMENTED: post create platform');
-// };
 
 exports.platform_delete_get = function (req, res, next) {
   // res.send('NOT IMPLEMENTED: get delete platform');
@@ -140,19 +135,6 @@ exports.platform_delete_get = function (req, res, next) {
       });
     }
   );
-
-  // Platform.findById(req.params.id).exec(function (err, platform) {
-  //   if (err) {
-  //     return next(err);
-  //   }
-  //   if (platform == null) {
-  //     res.redirect('/catalog');
-  //   }
-  //   res.render('platform_delete', {
-  //     title: 'Delete Platform',
-  //     platform: platform,
-  //   });
-  // });
 };
 
 exports.platform_delete_post = function (req, res, next) {
@@ -185,24 +167,81 @@ exports.platform_delete_post = function (req, res, next) {
       }
     }
   );
-
-  // Platform.findById(req.params.id).exec(function (err, platform) {
-  //   if (err) {
-  //     return next(err);
-  //   }
-  //   Platform.findByIdAndRemove(req.body.platformid, function (err) {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     res.redirect('/catalog');
-  //   });
-  // });
 };
 
 exports.platform_update_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: get update platform');
+  // res.send('NOT IMPLEMENTED: get update platform');
+
+  Platform.findById(req.params.id).exec(function (err, platform) {
+    if (err) {
+      return next(err);
+    }
+    if (platform === null) {
+      let err = new Error('platform not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('platform_form', {
+      title: 'Update New Platform',
+      platform: platform,
+    });
+  });
 };
 
-exports.platform_update_post = function (req, res) {
-  res.send('NOT IMPLEMENTED: post update platform');
-};
+exports.platform_update_post = [
+  // Validate and sanitize the name field.
+  body('console', 'console required').trim().isLength({ min: 1 }).escape(),
+  body('description').trim().escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a genre object with escaped and trimmed data.
+    var platform = new Platform({
+      _id: req.params.id,
+      console: req.body.console,
+      description: req.body.description,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render('platform_form', {
+        title: 'Update Platform',
+        platform: req.body,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid.
+      // Check if platform with same console already exists.
+      Platform.findOne({ console: req.body.console }).exec(function (
+        err,
+        found_console
+      ) {
+        if (err) {
+          return next(err);
+        }
+
+        if (found_console) {
+          // console exists, redirect to its detail page.
+          res.redirect(found_console.url);
+        } else {
+          Platform.findByIdAndUpdate(
+            req.params.id,
+            platform,
+            {},
+            function (err, theplatform) {
+              if (err) {
+                return next(err);
+              }
+              // Genre saved. Redirect to genre detail page.
+              res.redirect(theplatform.url);
+            }
+          );
+        }
+      });
+    }
+  },
+];

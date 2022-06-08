@@ -25,7 +25,7 @@
           <select class="form-select" type="select" placeholder="Select a game" name="game" aria-label="Default select example" required="true">
               <% for (let game of games) { %>
                 <% if (gameinstance) { %>
-                  <option value="<%= game._id %>" selected="<%- (game._id.toString() === gameinstance.game._id || game._id.toString() === gameinstance.game) ? 'selected' : false %>">
+                  <option value="<%= game._id %>" <%- gameinstance.game._id.toString() === game._id.toString() ? 'selected' : false %>>
                     <%= game.title %>
                   </option>
                 <% } else { %>
@@ -41,7 +41,7 @@
           <select class="form-select" type="select" placeholder="Select a platform" name="platform" aria-label="Default select example" required="true">
               <% for (let platform of platforms) { %>
                 <% if (gameinstance) { %>
-                  <option value="<%= platform._id %>" selected="<%- (platform._id.toString() === gameinstance.platform._id || platform._id.toString() === gameinstance.platform) ? 'selected' : false %>">
+                  <option value="<%= platform._id %>" <%- gameinstance.platform._id.toString() === platform._id.toString() ? 'selected' : false %>>
                     <%= platform.console %>
                   </option>
                 <% } else { %>
@@ -59,10 +59,10 @@
         <div class="mb-3">
           <label for="status" class="form-label">Status:</label>
           <select class="form-select" type="select" placeholder="Select a status" name="status" aria-label="Default select example" required="true">
-              <option>Available</option>
-              <option>Maintenance</option>
-              <option>Loaned</option>
-              <option>Reserved</option>
+              <option <%- undefined === gameinstance || gameinstance.status.toString() !== 'Available' ? false : 'selected' %>>Available</option>
+              <option <%- undefined === gameinstance || gameinstance.status.toString() !== 'Maintenance' ? false : 'selected' %>>Maintenance</option>
+              <option <%- undefined === gameinstance || gameinstance.status.toString() !== 'Loaned' ? false : 'selected' %>>Loaned</option>
+              <option <%- undefined === gameinstance || gameinstance.status.toString() !== 'Reserved' ? false : 'selected' %>>Reserved</option>
           </select>
         </div>
         <div class="mb-3">

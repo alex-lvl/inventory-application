@@ -11,7 +11,9 @@
 
       <main>
         <% if (developer_games.length) { %>
-        <h4>Delete the following games before attempting to delete developer</h4>
+        <h4>
+          Delete the following games before attempting to delete developer
+        </h4>
         <ul class="fs-5">
           <% for (let prop in developer_games) { %>
           <li>
@@ -22,11 +24,17 @@
           <% } %>
         </ul>
         <% } else { %>
-          <h4>Do you really want to delete this Developer?</h4>
-          <form method="POST">
-            <input type="hidden" name="developerid" id="" value="<%- developer._id %>" required="true">
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
+        <h4>Do you really want to delete this Developer?</h4>
+        <form method="POST">
+          <input
+            type="hidden"
+            name="developerid"
+            id=""
+            value="<%- developer._id %>"
+            required="true"
+          />
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
         <% } %>
       </main>
 

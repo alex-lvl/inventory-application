@@ -11,27 +11,38 @@
 
       <main>
         <% if (platform_gameinstances.length) { %>
-          <h4>Delete the following game copies before attempting to delete this Platform</h4>
-          <ul class="fs-5">
-            <% for (let prop in platform_gameinstances) { %>
-            <li>
-              <a href="<%= platform_gameinstances[prop].url %>">
-                <%- platform_gameinstances[prop].game.title %>
-              </a>
-              <ul>
-                <li>Platform: <%- platform_gameinstances[prop].platform.console %></li>
-                <li>Status: <%- platform_gameinstances[prop].status %></li>
-              </ul>
-            </li>
-            <% } %>
-          </ul>
-          <% } else { %>
-            <h4>Do you really want to delete this Platform?</h4>
-            <form method="POST">
-              <input type="hidden" name="platformid" id="" value="<%- platform._id %>" required="true">
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+        <h4>
+          Delete the following game copies before attempting to delete this
+          Platform
+        </h4>
+        <ul class="fs-5">
+          <% for (let prop in platform_gameinstances) { %>
+          <li>
+            <a href="<%= platform_gameinstances[prop].url %>">
+              <%- platform_gameinstances[prop].game.title %>
+            </a>
+            <ul>
+              <li>
+                Platform: <%- platform_gameinstances[prop].platform.console %>
+              </li>
+              <li>Status: <%- platform_gameinstances[prop].status %></li>
+            </ul>
+          </li>
           <% } %>
+        </ul>
+        <% } else { %>
+        <h4>Do you really want to delete this Platform?</h4>
+        <form method="POST">
+          <input
+            type="hidden"
+            name="platformid"
+            id=""
+            value="<%- platform._id %>"
+            required="true"
+          />
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <% } %>
       </main>
 
       <footer class="pt-5 my-5 text-muted border-top">

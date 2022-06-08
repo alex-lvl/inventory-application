@@ -11,23 +11,32 @@
 
       <main>
         <% if (genre_games.length) { %>
-          <h4>Delete the following games or update and remove the Genre: <%= genre.name %> before attempting to delete genre</h4>
-          <ul class="fs-5">
-            <% for (let prop in genre_games) { %>
-            <li>
-              <a href="<%= genre_games[prop].url %>">
-                <%- genre_games[prop].title %>
-              </a>
-            </li>
-            <% } %>
-          </ul>
-          <% } else { %>
-            <h4>Do you really want to delete this Genre?</h4>
-            <form method="POST">
-              <input type="hidden" name="genreid" id="" value="<%- genre._id %>" required="true">
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+        <h4>
+          Delete the following games or update and remove the Genre: <%=
+          genre.name %> before attempting to delete genre
+        </h4>
+        <ul class="fs-5">
+          <% for (let prop in genre_games) { %>
+          <li>
+            <a href="<%= genre_games[prop].url %>">
+              <%- genre_games[prop].title %>
+            </a>
+          </li>
           <% } %>
+        </ul>
+        <% } else { %>
+        <h4>Do you really want to delete this Genre?</h4>
+        <form method="POST">
+          <input
+            type="hidden"
+            name="genreid"
+            id=""
+            value="<%- genre._id %>"
+            required="true"
+          />
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <% } %>
       </main>
 
       <footer class="pt-5 my-5 text-muted border-top">

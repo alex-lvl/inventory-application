@@ -10,11 +10,17 @@
       </header>
 
       <main>
-          <h4>Do you really want to delete this Game Copy?</h4>
-          <form method="POST">
-            <input type="hidden" name="gameinstanceid" id="" value="<%- gameinstance._id %>" required="true">
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
+        <h4>Do you really want to delete this Game Copy?</h4>
+        <form method="POST">
+          <input
+            type="hidden"
+            name="gameinstanceid"
+            id=""
+            value="<%- gameinstance._id %>"
+            required="true"
+          />
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       </main>
 
       <footer class="pt-5 my-5 text-muted border-top">

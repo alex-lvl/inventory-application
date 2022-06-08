@@ -9,27 +9,39 @@
         <h1><%= title %></h1>
 
         <% if (errors) { %>
-          <ul>
-            <% for (let error of errors) { %>
-              <li>
-                  <%- error.msg %>
-              </li>
-              <% } %>
-          </ul>
+        <ul>
+          <% for (let error of errors) { %>
+          <li><%- error.msg %></li>
+          <% } %>
+        </ul>
         <% } %>
       </header>
-      
+
       <form action="" method="POST">
         <div class="mb-3">
           <label for="name" class="form-label">Name:</label>
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="name" name="name" required="true" value="<%- undefined === genre ? '' : genre.name %>" >
+          <input
+            type="text"
+            class="form-control"
+            id="exampleFormControlInput1"
+            placeholder="name"
+            name="name"
+            required="true"
+            value="<%- undefined === genre ? '' : genre.name %>"
+          />
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description:</label>
-          <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="description">
+          <textarea
+            class="form-control"
+            name="description"
+            id="exampleFormControlTextarea1"
+            rows="3"
+            placeholder="description"
+          >
             <%- genre === undefined ? '' : genre.description %>
           </textarea>
-        </div>  
+        </div>
         <div class="col-auto">
           <button type="submit" class="btn btn-primary mb-3">Submit</button>
         </div>
